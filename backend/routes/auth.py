@@ -91,8 +91,8 @@ def register():
         user = User.create_user(
             email=body.email,
             password=body.password,
-            first_name=body.firstname,
-            last_name=body.lastname,
+            first_name=body.first_name,
+            last_name=body.last_name,
             phone_number=body.phone_number,
             role=UserRole.PUBLIC.value,
         )

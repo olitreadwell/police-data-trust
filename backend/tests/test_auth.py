@@ -86,6 +86,30 @@ def test_register(
 
 
 @pytest.mark.parametrize(
+    ("first_name", "last_name"),
+    [("John", "Doe"), (None, None)],
+)
+def test_register_accepts_documented_field_names(
+    client, existing_user, first_name, last_name
+):
+    """The API docs document first_name/last_name; the endpoint must accept them."""
+    res = client.post(
+        "api/v1/auth/register",
+        json={
+            "email": "documented_fields@email.com",
+            "password": "my_password",
+            "first_name": first_name,
+            "last_name": last_name,
+            "phone_number": "1234567890",
+        },
+    )
+
+    assert res.status_code == 200
+    assert res.json["access_token"] is not None
+    assert res.json["refresh_token"] is not None
+
+
+@pytest.mark.parametrize(
     ("password", "expected_status_code"),
     [("my_password", 200), ("bad_password", 401), (None, 422)],
 )
